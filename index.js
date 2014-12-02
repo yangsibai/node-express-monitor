@@ -11,7 +11,12 @@ monitor = function (app, handler, time, special) {
         res.on('finish', function () {
             var end = Date.now();
             var elapsed = end - start;
-            if ((special.hasOwnProperty(req.path) && special[req.path] > time) || elapsed > time) {
+            if (special.hasOwnProperty(req.path)){
+                if(special[req.path] > time){
+                    handler.call(this, req, elapsed);
+                }
+            }
+            else if (elapsed > time){
                 handler.call(this, req, elapsed);
             }
         });
